@@ -79,10 +79,10 @@ var handlers = {
         this.emit(':tellWithCard', this.t("STOP_MESSAGE"), this.t("STOP_CARD"), this.t("STOP_MESSAGE"));
     },
     'LunchMenuIntent': function() {
-        this.emit(':askWithCard', this.t("LUNCH_MESSAGE"), this.t("LUNCH_CARD"), this.t("LUNCH_MESSAGE"));
+        this.emit(':askWithCard', this.t("LUNCH_MESSAGE"), this.t("LUNCH_MESSAGE"), this.t("LUNCH_CARD"), this.t("LUNCH_MESSAGE"));
     },
     'DinnerMenuIntent': function() {
-        this.emit(':askWithCard', this.t("DINNER_MESSAGE"), this.t("DINNER_CARD"), this.t("DINNER_MESSAGE"));
+        this.emit(':askWithCard', this.t("DINNER_MESSAGE"), this.t("DINNER_MESSAGE"), this.t("DINNER_CARD"), this.t("DINNER_MESSAGE"));
     },
     'WaterIntent': function() {
         let alexa = this;
@@ -93,7 +93,7 @@ var handlers = {
             })
             .then((message) => {
                 console.log(message.sid)
-                alexa.emit(':askWithCard', alexa.t("WATER_MESSAGE"), alexa.t("WATER_CARD"), alexa.t("WATER_MESSAGE"));
+                alexa.emit(':askWithCard', alexa.t("WATER_MESSAGE"), alexa.t("WATER_MESSAGE"), alexa.t("WATER_CARD"), alexa.t("WATER_MESSAGE"));
             });
     },
     'AdjustBedIntent': function() {
@@ -105,7 +105,7 @@ var handlers = {
             })
             .then((message) => {
                 console.log(message.sid)
-                alexa.emit(':askWithCard', alexa.t("NURSE_MESSAGE"), alexa.t("NURSE_CARD"), alexa.t("NURSE_MESSAGE"));
+                alexa.emit(':askWithCard', alexa.t("NURSE_MESSAGE"), alexa.t("NURSE_MESSAGE"), alexa.t("NURSE_CARD"), alexa.t("NURSE_MESSAGE"));
             });
     },
     'AdjustBlindsIntent': function() {
@@ -118,7 +118,7 @@ var handlers = {
             })
             .then((message) => {
                 console.log(message.sid)
-                alexa.emit(':askWithCard', alexa.t("NURSE_MESSAGE"), alexa.t("NURSE_CARD"), alexa.t("NURSE_MESSAGE"));
+                alexa.emit(':askWithCard', alexa.t("NURSE_MESSAGE"), alexa.t("NURSE_MESSAGE"), alexa.t("NURSE_CARD"), alexa.t("NURSE_MESSAGE"));
             });
     },
     'AdjustTVIntent': function() {
@@ -130,7 +130,7 @@ var handlers = {
             })
             .then((message) => {
                 console.log(message.sid)
-                alexa.emit(':askWithCard', alexa.t("NURSE_MESSAGE"), alexa.t("NURSE_CARD"), alexa.t("NURSE_MESSAGE"));
+                alexa.emit(':askWithCard', alexa.t("NURSE_MESSAGE"), alexa.t("NURSE_MESSAGE"), alexa.t("NURSE_CARD"), alexa.t("NURSE_MESSAGE"));
             });
     },
     'QuitIntent': function() {

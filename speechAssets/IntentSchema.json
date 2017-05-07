@@ -1,6 +1,6 @@
 {
   "intents": [{
-    "intent": "MirrorMirrorHelloIntent"
+    "intent": "HelloIntent"
   }, {
     "intent": "AMAZON.HelpIntent"
   }, {
@@ -8,38 +8,16 @@
   }, {
     "intent": "AMAZON.CancelIntent"
   }, {
-    "intent": "ShowTextIntent",
-    "slots": [{
-      "name": "displayText",
-      "type": "AMAZON.LITERAL"
-    }]
+    "intent": "WaterIntent"
   }, {
-    "intent": "ShowImagesIntent",
-    "slots": [{
-      "name": "searchTerm",
-      "type": "AMAZON.LITERAL"
-    }]
+    "intent": "LunchMenuIntent"
   }, {
-    "intent": "TurnOnModuleIntent",
-    "slots": [{
-      "name": "moduleName",
-      "type": "AMAZON.LITERAL"
-    }]
+    "intent": "DinnerMenuIntent"
   }, {
-    "intent": "TurnOffModuleIntent",
-    "slots": [{
-      "name": "moduleName",
-      "type": "AMAZON.LITERAL"
-    }]
+    "intent": "AdjustBedIntent"
   }, {
-    "intent": "ShowVideoIntent",
-    "slots": [{
-      "name": "searchTermVideo",
-      "type": "AMAZON.LITERAL"
-    }]
+    "intent": "AdjustBlindsIntent"
   }, {
-    "intent": "TurnOnAllModuleIntent"
-  }, {
-    "intent": "TurnOffAllModuleIntent"
+    "intent": "AdjustTVIntent"
   }]
 }

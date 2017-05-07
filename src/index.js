@@ -10,12 +10,17 @@
 
 const Alexa = require('alexa-sdk');
 
+// Load the twilio module
+const keys = require('./keys.json');
+var twilio = require('twilio');
+var client = new twilio(keys.SID, keys.token);
+
 /**
  * App ID for the skill
  * 
  * replace with your app ID 
  */
-const APP_ID = "amzn1.ask.skill.12001a25-5faa-4651-84dc-cd584a1c5ffa";
+const APP_ID = "amzn1.ask.skill.ab242a44-ae07-4b0d-bb50-1e53cdee4026";
 
 exports.handler = function(event, context, callback) {
     let alexa = Alexa.handler(event, context);
@@ -29,32 +34,20 @@ exports.handler = function(event, context, callback) {
 var languageStrings = {
     "en-US": {
         "translation": {
-            "WELCOME_MESSAGE": "Hello my Queen, what can I do for you? ",
-            "WELCOME_REPROMPT": "I can show you text and images, if you give me commands like 'say you are the fairest of them all' or 'find Snow White'. I can also open or close a magic mirror module, if you say commands like 'open compliments', or 'close weather forecast'. What can I do for you, my Queen?",
+            "WELCOME_MESSAGE": "Hello, I'm your personal assistant. You can say 'I want water', 'lunch menu', 'dinner menu', 'adjust bed', 'adjust blind', 'change TV channel'. ",
+            "WELCOME_REPROMPT": "",
             "WELCOME_CARD": "Hello",
-            "HELP_MESSAGE": "Hello my Queen, I can show you text and images, if you give me commands like 'say you are the fairest of them all' or 'find Snow White'. I can also open or close a magic mirror module, if you say commands like 'open compliments', or 'close weather forecast'. What can I do for you, my Queen?",
+            "HELP_MESSAGE": "",
             "HELP_CARD": "Help",
             "STOP_MESSAGE": "See you next time, my Queen!",
             "STOP_CARD": "Goodbye",
-            "SHOW_TEXT": "Yes, my Queen. %s.",
-            "SHOW_TEXT_ERR": "Sorry, my Queen, I didn't get that. You can give me commands like 'display text of hello', or 'say you are the fairest of them all'. What can I do for you, my Queen?",
-            "SHOW_TEXT_CARD": "Display Text",
-            "SHOW_IMAGE": "Yes, my Queen, showing images of %s.",
-            "SHOW_IMAGE_ERR": "Sorry, my Queen, I didn't get that. You can give me commands like 'find Snow White' or 'show me images of Bill Gates'. What can I do for you, my Queen?",
-            "SHOW_IMAGE_CARD": "Show Image",
-            "TURN_ON_MODULE": "Yes, my Queen, opening module %s.",
-            "TURN_ON_MODULE_ERR": "Sorry, my Queen, I didn't get that. You can give me commands like 'open current weather' or 'turn on compliments'. What can I do for you, my Queen?",
-            "TURN_ON_MODULE_CARD": "Open Module",
-            "TURN_ON_ALL_MODULES": "Yes, my Queen, opening all modules.",
-            "TURN_ON_ALL_MODULES_CARD": "Open All Modules",
-            "TURN_OFF_MODULE": "Yes, my Queen, closing module %s.",
-            "TURN_OFF_MODULE_ERR": "Sorry, my Queen, I didn't get that. You can give me commands like 'close current weather' or 'turn off compliments'. What can I do for you, my Queen?",
-            "TURN_OFF_MODULE_CARD": "Close Module",
-            "TURN_OFF_ALL_MODULES": "Yes, my Queen, closing all modules.",
-            "TURN_OFF_ALL_MODULES_CARD": "Close All Modules",
-            "SHOW_VIDEO": "Yes, my Queen, showing a video of %s.",
-            "SHOW_VIDEO_ERR": "Sorry, my Queen, I didn't get that. You can give me commands like 'find a video of Snow White' or 'show me a video of Bill Gates'. What can I do for you, my Queen?",
-            "SHOW_VIDEO_CARD": "Play Video",
+            "LUNCH_MESSAGE": "turkey sandwich, chocolate cookies",
+            "LUNCH_CARD": "Lunch",
+            "DINNER_MESSAGE": "turkey sandwich, chocolate cookies",
+            "DINNER_CARD": "Dinner",
+            "WATER_MESSAGE": "The nurse is on her way with your water",
+            "WATER_CARD": "WATER",
+
             "ERROR_CARD": "Error"
         }
     }
@@ -62,9 +55,9 @@ var languageStrings = {
 
 var handlers = {
     'LaunchRequest': function() {
-        this.emit('SayHello');
+        alexa.emit('SayHello');
     },
-    'MirrorMirrorHelloIntent': function() {
+    'HelloIntent': function() {
         this.emit('SayHello');
     },
     'SayHello': function() {
@@ -82,115 +75,66 @@ var handlers = {
     'StopCommand': function() {
         this.emit(':tellWithCard', this.t("STOP_MESSAGE"), this.t("STOP_CARD"), this.t("STOP_MESSAGE"));
     },
-    'ShowTextIntent': function() {
-        let displayText = this.event.request.intent.slots.displayText.value;
-        if (displayText) {
-            let alexa = this
-
-            // Alexa voice/card response to invoke after text is published to AWS IoT successfully
-            let alexaEmit = function() {
-                alexa.emit(':tellWithCard', alexa.t("SHOW_TEXT", displayText), alexa.t("SHOW_TEXT_CARD"), displayText)
-            }
-
-            // Send publish attempt to AWS IoT
-            MirrorMirror.displayText(displayText, alexaEmit);
-        } else {
-            this.emit(':askWithCard', this.t("SHOW_TEXT_ERR"), this.t("SHOW_TEXT_ERR"), this.t("ERROR_CARD"), this.t("SHOW_TEXT_ERR"))
-        }
+    'LunchMenuIntent': function() {
+        this.emit(':tellWithCard', this.t("LUNCH_MESSAGE"), this.t("LUNCH_CARD"), this.t("LUNCH_MESSAGE"));
     },
-    'ShowImagesIntent': function() {
-        let searchTerm = this.event.request.intent.slots.searchTerm.value;
-        if (searchTerm) {
-            let alexa = this
-
-            // Search for images
-            googleImages.search(searchTerm).then(function(images) {
-                // Only https urls are allowed for the Alexa cards
-                let imageObj = {
-                    smallImageUrl: images[0].thumbnail.url,
-                    largeImageUrl: images[0].thumbnail.url
-                };
-                let alexaEmit = function() {
-                    alexa.emit(':tellWithCard', alexa.t("SHOW_IMAGE", searchTerm), alexa.t("SHOW_IMAGE_CARD"), searchTerm, imageObj)
-                }
-
-                // Send publish attempt to AWS IoT
-                MirrorMirror.showImages(images, searchTerm, alexaEmit);
+    'DinnerMenuIntent': function() {
+        this.emit(':tellWithCard', this.t("DINNER_MESSAGE"), this.t("DINNER_CARD"), this.t("DINNER_MESSAGE"));
+    },
+    'WaterIntent': function() {
+        // Pass in parameters to the REST API using an object literal notation. The
+        // REST client will handle authentication and response serialzation for you.
+        let alexa = this;
+        client.messages.create({
+                body: 'Hi, I\'m Joanna, can I get some water please!',
+                to: '+19173250738', // Text this number
+                from: '+19179246543 ' // From a valid Twilio number
             })
-        } else {
-            this.emit(':askWithCard', this.t("SHOW_IMAGE_ERR"), this.t("SHOW_IMAGE_ERR"), this.t("ERROR_CARD"), this.t("SHOW_IMAGE_ERR"))
-        }
-    },
-    'TurnOnModuleIntent': function() {
-        let moduleName = this.event.request.intent.slots.moduleName.value;
-        if (moduleName) {
-            let alexa = this
-            let alexaEmit = function() {
-                alexa.emit(':tellWithCard', alexa.t("TURN_ON_MODULE", moduleName), alexa.t("TURN_ON_MODULE_CARD"), alexa.t("TURN_ON_MODULE", moduleName))
-            }
-
-            // Send publish attempt to AWS IoT
-            MirrorMirror.changeModule(moduleName, true, alexaEmit);
-        } else {
-            this.emit(':askWithCard', this.t("TURN_ON_MODULE_ERR"), this.t("TURN_ON_MODULE_ERR"), this.t("ERROR_CARD"), this.t("TURN_ON_MODULE_ERR"))
-        }
-    },
-    'TurnOnAllModuleIntent': function() {
-        let alexa = this
-        let alexaEmit = function() {
-            alexa.emit(':tellWithCard', alexa.t("TURN_ON_ALL_MODULES"), alexa.t("TURN_ON_ALL_MODULES_CARD"), alexa.t("TURN_ON_ALL_MODULES"))
-        }
-        MirrorMirror.changeModule('all_modules', true, alexaEmit);
-
-    },
-    'TurnOffModuleIntent': function() {
-        let moduleName = this.event.request.intent.slots.moduleName.value;
-        if (moduleName) {
-            let alexa = this
-            let alexaEmit = function() {
-                alexa.emit(':tellWithCard', alexa.t("TURN_OFF_MODULE", moduleName), alexa.t("TURN_OFF_MODULE_CARD"), alexa.t("TURN_OFF_MODULE", moduleName))
-            }
-
-            // Send publish attempt to AWS IoT
-            MirrorMirror.changeModule(moduleName, false, alexaEmit);
-        } else {
-            this.emit(':askWithCard', this.t("TURN_OFF_MODULE_ERR"), this.t("TURN_OFF_MODULE_ERR"), this.t("ERROR_CARD"), this.t("TURN_OFF_MODULE_ERR"))
-        }
-    },
-    'TurnOffAllModuleIntent': function() {
-        let alexa = this
-        let alexaEmit = function() {
-            alexa.emit(':tellWithCard', alexa.t("TURN_OFF_ALL_MODULES"), alexa.t("TURN_OFF_ALL_MODULES_CARD"), alexa.t("TURN_OFF_ALL_MODULES"))
-        }
-        MirrorMirror.changeModule('all_modules', false, alexaEmit);
-
-    },
-    'ShowVideoIntent': function() {
-        let searchTerm = this.event.request.intent.slots.searchTermVideo.value;
-        if (searchTerm) {
-            let alexa = this
-
-            // search for Youtube video
-            youTube.search(searchTerm, 1, function(error, result) {
-                if (error) {
-                    console.log(error);
-                } else {
-                    console.log(JSON.stringify(result, null, 2));
-
-                    let imageObj = {
-                        smallImageUrl: result.items[0].snippet.thumbnails.default.url,
-                        largeImageUrl: result.items[0].snippet.thumbnails.high.url
-                    };
-                    let alexaEmit = function() {
-                        alexa.emit(':tellWithCard', alexa.t("SHOW_VIDEO", searchTerm), alexa.t("SHOW_VIDEO_CARD"), searchTerm, imageObj)
-                    }
-
-                    // Send publish attempt to AWS IoT
-                    MirrorMirror.showVideo(result.items[0].id.videoId, searchTerm, alexaEmit);
-                }
+            .then((message) => {
+                console.log(message.sid)
+                alexa.emit(':tellWithCard', alexa.t("WATER_MESSAGE"), alexa.t("WATER_CARD"), alexa.t("WATER_MESSAGE"));
             });
-        } else {
-            this.emit(':askWithCard', this.t("SHOW_VIDEO_ERR"), this.t("SHOW_VIDEO_ERR"), this.t("ERROR_CARD"), this.t("SHOW_VIDEO_ERR"))
-        }
+    },
+    'AdjustBedIntent': function() {
+        // Pass in parameters to the REST API using an object literal notation. The
+        // REST client will handle authentication and response serialzation for you.
+        let alexa = this;
+        client.messages.create({
+                body: 'Hi, I\'m Joanna, can I get my bed fixed please!',
+                to: '+19173250738', // Text this number
+                from: '+19179246543 ' // From a valid Twilio number
+            })
+            .then((message) => {
+                console.log(message.sid)
+                alexa.emit(':tellWithCard', alexa.t("WATER_MESSAGE"), alexa.t("WATER_CARD"), alexa.t("WATER_MESSAGE"));
+            });
+    },
+    'AdjustBlindsIntent': function() {
+        // Pass in parameters to the REST API using an object literal notation. The
+        // REST client will handle authentication and response serialzation for you.
+        let alexa = this;
+        client.messages.create({
+                body: 'Hi, I\'m Joanna, can I get some water please!',
+                to: '+19173250738', // Text this number
+                from: '+19179246543 ' // From a valid Twilio number
+            })
+            .then((message) => {
+                console.log(message.sid)
+                alexa.emit(':tellWithCard', alexa.t("WATER_MESSAGE"), alexa.t("WATER_CARD"), alexa.t("WATER_MESSAGE"));
+            });
+    },
+    'AdjustTVIntent': function() {
+        // Pass in parameters to the REST API using an object literal notation. The
+        // REST client will handle authentication and response serialzation for you.
+        let alexa = this;
+        client.messages.create({
+                body: 'Hi, I\'m Joanna, can I get some water please!',
+                to: '+19173250738', // Text this number
+                from: '+19179246543 ' // From a valid Twilio number
+            })
+            .then((message) => {
+                console.log(message.sid)
+                alexa.emit(':tellWithCard', alexa.t("WATER_MESSAGE"), alexa.t("WATER_CARD"), alexa.t("WATER_MESSAGE"));
+            });
     }
 };

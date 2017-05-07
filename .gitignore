@@ -5,3 +5,4 @@ node_modules
 *.pem
 **/keys.json
 *.zip
+keys.json

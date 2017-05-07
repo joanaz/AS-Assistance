@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/joanaz/MirrorMirrorOnTheWallSkill#readme",
   "dependencies": {
-    "alexa-sdk": "latest"
+    "alexa-sdk": "latest",
+    "twilio": "latest"
   }
 }

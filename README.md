@@ -1,88 +1,18 @@
-# Mirror Mirror On The Wall Alexa Skill
-An [AWS Lambda](http://aws.amazon.com/lambda) function of an Alexa skill for communicating and controlling a [MagicMirror](https://github.com/MichMich/MagicMirror) using AWS IoT Device Gateway. 
+# Alexa Skill Assistance
 
-It is complementary to the Magic Mirror Module [Mirror Mirror On The Wall](https://github.com/joanaz/MMM-MirrorMirrorOnTheWall).
+WiTNY Build-a-thon
 
-Please follow the steps below to setup and install this Alexa skill correctly.
+An [AWS Lambda](http://aws.amazon.com/lambda) function of an Alexa skill for communicating 
 
-## 1. Setup an AWS IoT Device
-
-You need to setup an AWS IoT Device, which is used for the communication between this Alexa skill and the Magic Mirror node app. The credentials you obtained through this process will also be used by the complementary Magic Mirror Module.
-
-1. login to __[AWS Management Console](https://console.aws.amazon.com/console/home?region=us-east-1)__
-![](https://github.com/joanaz/MirrorMirrorOnTheWallSkill/raw/screenshots/screenshots/Screen Shot 2017-02-23 at 17.53.40.png)
-
-2. choose US East region
-![](https://github.com/joanaz/MirrorMirrorOnTheWallSkill/raw/screenshots/screenshots/Screen Shot 2017-02-23 at 18.13.43.png)
-
-3. find __AWS IoT__ service
-![](https://github.com/joanaz/MirrorMirrorOnTheWallSkill/raw/screenshots/screenshots/Screen Shot 2017-02-23 at 17.53.45.png)
-
-4. click on __Connect__ at the left menu bar, under _Configuring a device_, click on __Get Started__
-![](https://github.com/joanaz/MirrorMirrorOnTheWallSkill/raw/screenshots/screenshots/Screen Shot 2017-02-23 at 17.36.20.png)
-
-5. choose __Linux/OSX__ platform, and __Node.js__
-![](https://github.com/joanaz/MirrorMirrorOnTheWallSkill/raw/screenshots/screenshots/Screen Shot 2017-02-23 at 17.36.38.png)
-
-6. click on __Get Started__
-![](https://github.com/joanaz/MirrorMirrorOnTheWallSkill/raw/screenshots/screenshots/Screen Shot 2017-02-23 at 17.36.48.png)
-
-7. name your device __MagicMirror__
-![](https://github.com/joanaz/MirrorMirrorOnTheWallSkill/raw/screenshots/screenshots/Screen Shot 2017-02-23 at 17.37.35.png)
-
-8. download credentials, aka connection kit
-![](https://github.com/joanaz/MirrorMirrorOnTheWallSkill/raw/screenshots/screenshots/Screen Shot 2017-02-23 at 17.38.03.png)
-
-9. click on __Next step__
-![](https://github.com/joanaz/MirrorMirrorOnTheWallSkill/raw/screenshots/screenshots/Screen Shot 2017-02-23 at 17.38.26.png)
-
-10. follow the instructions to run the start.sh script, which will generate a root-CA.crt
-![](https://github.com/joanaz/MirrorMirrorOnTheWallSkill/raw/screenshots/screenshots/Screen Shot 2017-02-23 at 17.38.35.png)
-
-    1.
-    ![](https://github.com/joanaz/MirrorMirrorOnTheWallSkill/raw/screenshots/screenshots/Screen Shot 2017-02-23 at 18.33.05.png)
-
-    2. 
-    ![](https://github.com/joanaz/MirrorMirrorOnTheWallSkill/raw/screenshots/screenshots/Screen Shot 2017-02-23 at 18.33.21.png)
-
-    3. 
-    ![](https://github.com/joanaz/MirrorMirrorOnTheWallSkill/raw/screenshots/screenshots/Screen Shot 2017-02-23 at 18.34.29.png)
-
-    4. 
-    ![](https://github.com/joanaz/MirrorMirrorOnTheWallSkill/raw/screenshots/screenshots/Screen Shot 2017-02-23 at 18.35.20.png)
-
-11. copy all your credential files, then go to your local copy of this repo, and paste them inside the __certs__ folder (which is inside the __src__ folder)
-![](https://github.com/joanaz/MirrorMirrorOnTheWallSkill/raw/screenshots/screenshots/Screen Shot 2017-02-23 at 18.43.51.png)
-
-
-## 2. Install Dependencies
+## 1. Install Dependencies
 
 Dependencies are installed by navigating to your __src__ directory on command line, and enter `npm install`.
 
 - [alexa-sdk](https://github.com/alexa/alexa-skills-kit-sdk-for-nodejs) (installed via `npm install`)
-- [aws-iot-device-sdk](https://github.com/aws/aws-iot-device-sdk-js) (installed via `npm install`)
-- [Google Images Search](https://www.npmjs.com/package/google-images) (installed via `npm install`). Follow the instructions in the link to create your own Google Custom Search Engine, and save the CSE ID and API key in __certs/keys.json__ (see keys_sample.json below).
-- [Youtube API](https://www.npmjs.com/package/youtube-node)(installed via `npm install`). Watch this [instruction video](https://youtu.be/Im69kzhpR3I) to create your own Youtube API key, and save it in __certs/keys.json__ (see keys_sample.json below).
-
-### 2.1 keys_sample.json
-
-On your command line, navigate to the __certs__ folder, then enter `cp keys_sample.json keys.json`, which will create a copy of keys_sample.json called keys.json. Copy and paste your API keys obtained above in __keys.json__.
-
-```javascript
-// keys_sample.json 
-{
-    "cse": {
-        "ID": "YOUR GOOGLE CUSTOM SEARCH ENGINE ID",
-        "API_key": "YOUR GOOGLE PROJECT API KEY"
-    },
-    "youtube": {
-        "API_key": "YOUR YOUTUBE API KEY"
-    }
-}
-```
 
 
-## 3. Deploy the Code in AWS Lambda
+
+## 2. Deploy the Code in AWS Lambda
 
 1. Go inside your local __src__ directory, select all files and folders and then create a zip file, make sure the zip file does not contain the src directory itself, otherwise Lambda function will not work.
 ![](https://github.com/joanaz/MirrorMirrorOnTheWallSkill/raw/screenshots/screenshots/Screen Shot 2017-02-24 at 12.07.02.png)

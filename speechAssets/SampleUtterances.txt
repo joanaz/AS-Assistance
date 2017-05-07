@@ -20,11 +20,10 @@ AdjustBedIntent I need to fix my bed
 AdjustBedIntent I'm not comfortable
 AdjustBedIntent adjust my bed
 
-AdjustBlindsIntent adjust my blinds
-AdjustBlindsIntent adjust blinds
-AdjustBlindsIntent close the window
-AdjustBlindsIntent it's too bright
-AdjustBlindsIntent it's too dark 
+AdjustBlindsIntent {lower|adjustment} my blinds
+AdjustBlindsIntent {rise|adjustment} my blinds
+AdjustBlindsIntent can you please {rise|adjustment} my blinds
+AdjustBlindsIntent can you please {lower|adjustment} my blinds
 
 AdjustTVIntent change channel
 AdjustTVIntent change TV channel
@@ -32,3 +31,4 @@ AdjustTVIntent change TV station
 AdjustTVIntent change station
 AdjustTVIntent change the television
 
+QuitIntent Thank you

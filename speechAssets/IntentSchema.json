@@ -16,8 +16,14 @@
   }, {
     "intent": "AdjustBedIntent"
   }, {
-    "intent": "AdjustBlindsIntent"
+    "intent": "AdjustBlindsIntent",
+    "slots": [{
+      "name": "adjustment",
+      "type": "AMAZON.LITERAL"
+    }]
   }, {
     "intent": "AdjustTVIntent"
+  }, {
+    "intent": "QuitIntent"
   }]
 }

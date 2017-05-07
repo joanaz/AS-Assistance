@@ -34,28 +34,31 @@ exports.handler = function(event, context, callback) {
 var languageStrings = {
     "en-US": {
         "translation": {
-            "WELCOME_MESSAGE": "Hello, I'm your personal assistant. You can say 'I want water', 'lunch menu', 'dinner menu', 'adjust bed', 'adjust blind', 'change TV channel'. ",
-            "WELCOME_REPROMPT": "",
+            "WELCOME_MESSAGE": "Hello, I'm your personal assistant. You can say 'I want water', 'lunch menu', 'dinner menu', 'adjust bed', 'lower blinds', 'rise blinds', 'change TV channel'. ",
+            "WELCOME_REPROMPT": "Hello, I'm your personal assistant. You can say 'I want water', 'lunch menu', 'dinner menu', 'adjust bed', 'lower blinds', 'rise blinds', 'change TV channel'. ",
             "WELCOME_CARD": "Hello",
-            "HELP_MESSAGE": "",
+            "HELP_MESSAGE": "Hello, I'm your personal assistant. You can say 'I want water', 'lunch menu', 'dinner menu', 'adjust bed', 'lower blinds', 'rise blinds', 'change TV channel'. ",
             "HELP_CARD": "Help",
-            "STOP_MESSAGE": "See you next time, my Queen!",
+            "STOP_MESSAGE": "See you next time.",
             "STOP_CARD": "Goodbye",
-            "LUNCH_MESSAGE": "turkey sandwich, chocolate cookies",
+            "LUNCH_MESSAGE": "For lunch, there will be turkey sandwiches and chocolate chip cookies",
             "LUNCH_CARD": "Lunch",
-            "DINNER_MESSAGE": "turkey sandwich, chocolate cookies",
+            "DINNER_MESSAGE": "For dinner, there will be meatball pasta and lemon cheesecake",
             "DINNER_CARD": "Dinner",
-            "WATER_MESSAGE": "The nurse is on her way with your water",
-            "WATER_CARD": "WATER",
-
-            "ERROR_CARD": "Error"
+            "WATER_MESSAGE": "The nurse is on her way with your water. ",
+            "WATER_CARD": "Water",
+            "NURSE_MESSAGE": "The nurse is notified, she will be with you soon. ",
+            "NURSE_CARD": "Notified",
+            "ERROR_CARD": "Error",
+            "BYE_MESSAGE": "You are welcome",
+            "BYE_CARD": "Bye"
         }
     }
 };
 
 var handlers = {
     'LaunchRequest': function() {
-        alexa.emit('SayHello');
+        this.emit('SayHello');
     },
     'HelloIntent': function() {
         this.emit('SayHello');
@@ -76,65 +79,62 @@ var handlers = {
         this.emit(':tellWithCard', this.t("STOP_MESSAGE"), this.t("STOP_CARD"), this.t("STOP_MESSAGE"));
     },
     'LunchMenuIntent': function() {
-        this.emit(':tellWithCard', this.t("LUNCH_MESSAGE"), this.t("LUNCH_CARD"), this.t("LUNCH_MESSAGE"));
+        this.emit(':askWithCard', this.t("LUNCH_MESSAGE"), this.t("LUNCH_CARD"), this.t("LUNCH_MESSAGE"));
     },
     'DinnerMenuIntent': function() {
-        this.emit(':tellWithCard', this.t("DINNER_MESSAGE"), this.t("DINNER_CARD"), this.t("DINNER_MESSAGE"));
+        this.emit(':askWithCard', this.t("DINNER_MESSAGE"), this.t("DINNER_CARD"), this.t("DINNER_MESSAGE"));
     },
     'WaterIntent': function() {
-        // Pass in parameters to the REST API using an object literal notation. The
-        // REST client will handle authentication and response serialzation for you.
         let alexa = this;
         client.messages.create({
-                body: 'Hi, I\'m Joanna, can I get some water please!',
-                to: '+19173250738', // Text this number
-                from: '+19179246543 ' // From a valid Twilio number
+                body: 'Hi, I\'m Joanna, can I get some water please?',
+                to: keys.myPhoneNum, // Text this number
+                from: keys.twilioNum // From a valid Twilio number
             })
             .then((message) => {
                 console.log(message.sid)
-                alexa.emit(':tellWithCard', alexa.t("WATER_MESSAGE"), alexa.t("WATER_CARD"), alexa.t("WATER_MESSAGE"));
+                alexa.emit(':askWithCard', alexa.t("WATER_MESSAGE"), alexa.t("WATER_CARD"), alexa.t("WATER_MESSAGE"));
             });
     },
     'AdjustBedIntent': function() {
-        // Pass in parameters to the REST API using an object literal notation. The
-        // REST client will handle authentication and response serialzation for you.
         let alexa = this;
         client.messages.create({
-                body: 'Hi, I\'m Joanna, can I get my bed fixed please!',
-                to: '+19173250738', // Text this number
-                from: '+19179246543 ' // From a valid Twilio number
+                body: 'Hi, I\'m Joanna, can I get my bed fixed please?',
+                to: keys.myPhoneNum, // Text this number
+                from: keys.twilioNum // From a valid Twilio number
             })
             .then((message) => {
                 console.log(message.sid)
-                alexa.emit(':tellWithCard', alexa.t("WATER_MESSAGE"), alexa.t("WATER_CARD"), alexa.t("WATER_MESSAGE"));
+                alexa.emit(':askWithCard', alexa.t("NURSE_MESSAGE"), alexa.t("NURSE_CARD"), alexa.t("NURSE_MESSAGE"));
             });
     },
     'AdjustBlindsIntent': function() {
-        // Pass in parameters to the REST API using an object literal notation. The
-        // REST client will handle authentication and response serialzation for you.
         let alexa = this;
+        let adjustment = this.event.request.intent.slots.adjustment.value;
         client.messages.create({
-                body: 'Hi, I\'m Joanna, can I get some water please!',
-                to: '+19173250738', // Text this number
-                from: '+19179246543 ' // From a valid Twilio number
+                body: 'Hi, I\'m Joanna, can you please ' + adjustment + ' my blinds?',
+                to: keys.myPhoneNum, // Text this number
+                from: keys.twilioNum // From a valid Twilio number
             })
             .then((message) => {
                 console.log(message.sid)
-                alexa.emit(':tellWithCard', alexa.t("WATER_MESSAGE"), alexa.t("WATER_CARD"), alexa.t("WATER_MESSAGE"));
+                alexa.emit(':askWithCard', alexa.t("NURSE_MESSAGE"), alexa.t("NURSE_CARD"), alexa.t("NURSE_MESSAGE"));
             });
     },
     'AdjustTVIntent': function() {
-        // Pass in parameters to the REST API using an object literal notation. The
-        // REST client will handle authentication and response serialzation for you.
         let alexa = this;
         client.messages.create({
-                body: 'Hi, I\'m Joanna, can I get some water please!',
-                to: '+19173250738', // Text this number
-                from: '+19179246543 ' // From a valid Twilio number
+                body: 'Hi, I\'m Joanna, can you please change my TV channel?',
+                to: keys.myPhoneNum, // Text this number
+                from: keys.twilioNum // From a valid Twilio number
             })
             .then((message) => {
                 console.log(message.sid)
-                alexa.emit(':tellWithCard', alexa.t("WATER_MESSAGE"), alexa.t("WATER_CARD"), alexa.t("WATER_MESSAGE"));
+                alexa.emit(':askWithCard', alexa.t("NURSE_MESSAGE"), alexa.t("NURSE_CARD"), alexa.t("NURSE_MESSAGE"));
             });
+    },
+    'QuitIntent': function() {
+        this.emit(':tellWithCard', this.t("BYE_MESSAGE"), this.t("BYE_CARD"), this.t("BYE_MESSAGE"));
+
     }
 };
